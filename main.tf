@@ -10,6 +10,7 @@ data "archive_file" "DataSource" {
 
 
   resource "aws_lambda_function" "this" {
+    count         = var.enabled ? 1 : 0
     filename = data.archive_file.DataSource.output_path
     source_code_hash = data.archive_file.DataSource.output_base64sha256
     function_name = var.function_name
@@ -27,7 +28,7 @@ data "archive_file" "DataSource" {
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_lambda_Fun_StopEC2" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.this.arn
+  function_name = aws_lambda_function.this.*.arn[0]
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.CloudWatch.arn
 
@@ -40,5 +41,5 @@ resource "aws_cloudwatch_event_rule" "CloudWatch" {
 }
 resource "aws_cloudwatch_event_target" "lambda_schedular_target" {
   rule = aws_cloudwatch_event_rule.CloudWatch.name
-  arn  = aws_lambda_function.this.arn
+  arn  = aws_lambda_function.this.*.arn[0]
 }

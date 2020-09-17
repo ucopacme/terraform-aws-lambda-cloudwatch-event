@@ -23,11 +23,11 @@ variable "tags" {
 
 }
 
-# variable "cloudwatchrole_name" {
-#   type = string
-#   description = "(optional) describe your variable"
-#   default = ""
-# }
+variable "enabled" {
+  description = "to be or not to be"
+  default     = true
+  type        = bool
+}
 
 variable "schedule_expression" {
   type = string
