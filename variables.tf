@@ -23,11 +23,6 @@ variable "tags" {
 
 }
 
-variable "enabled" {
-  description = "to be or not to be"
-  default     = true
-  type        = bool
-}
 
 variable "schedule_expression" {
   type = string

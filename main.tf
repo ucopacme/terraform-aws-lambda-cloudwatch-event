@@ -1,7 +1,4 @@
 
-locals {
-  enabled = var.enabled == "true"
-}
 
 data "archive_file" "DataSource" {
     type = "zip"
@@ -12,7 +9,6 @@ data "archive_file" "DataSource" {
 
 
   resource "aws_lambda_function" "this" {
-    count         = var.enabled ? 1 : 0
     filename = data.archive_file.DataSource.output_path
     source_code_hash = data.archive_file.DataSource.output_base64sha256
     function_name = var.function_name
@@ -28,23 +24,20 @@ data "archive_file" "DataSource" {
 
 
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_lambda_Fun_StopEC2" {
-  count         = var.enabled ? 1 : 0
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.this.*.arn[0]
+  function_name = aws_lambda_function.this.arn
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.CloudWatch.*.arn[0]
+  source_arn    = aws_cloudwatch_event_rule.CloudWatch.arn
 
 }
 
 resource "aws_cloudwatch_event_rule" "CloudWatch" {
-  count         = var.enabled ? 1 : 0
   name        = var.function_name
   description = var.description
   schedule_expression = var.schedule_expression
 }
 resource "aws_cloudwatch_event_target" "lambda_schedular_target" {
-  count         = var.enabled ? 1 : 0
-  rule = aws_cloudwatch_event_rule.CloudWatch.*.name[0]
-  arn  = aws_lambda_function.this.*.arn[0]
+  rule = aws_cloudwatch_event_rule.CloudWatch.name
+  arn  = aws_lambda_function.this.arn
 }
