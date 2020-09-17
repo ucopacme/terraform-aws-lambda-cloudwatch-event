@@ -46,9 +46,3 @@ variable "timeout" {
   description = "(optional) describe your variable"
   default = "420"
 }
-
-variable "enabled" {
-  type = string
-  description = "(optional) describe your variable"
-  default ="true"
-}
