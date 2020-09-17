@@ -1,5 +1,7 @@
 
-
+locals {
+  enabled = var.enabled == "true"
+}
 
 data "archive_file" "DataSource" {
     type = "zip"
