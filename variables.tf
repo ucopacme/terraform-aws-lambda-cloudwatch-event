@@ -1,3 +1,8 @@
+variable "enabled" {
+  default     = true
+  description = "Set to `false` to prevent the module from creating any resources"
+  type        = bool
+}
 variable "role" {
   type = string
   description = "(optional) describe your variable"

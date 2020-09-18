@@ -1,5 +1,6 @@
 
 resource "aws_iam_role" "role" {
+  count = var.enabled ? 1 : 0
   name               = var.iam_role_name
   assume_role_policy = <<EOF
 {
@@ -21,8 +22,9 @@ EOF
 
 }
 resource "aws_iam_role_policy" "lambda_policy" {
+  count = var.enabled ? 1 : 0
   name   = "Lambda_policy"
-  role   = aws_iam_role.role.id
+  role   = aws_iam_role.role.*.id[0]
   policy = <<EOF
 {
       "Version": "2012-10-17",
