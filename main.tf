@@ -28,16 +28,16 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_lambda_Fun_StopEC2" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.this.arn
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.CloudWatch.arn
+  source_arn    = aws_cloudwatch_event_rule.CloudWatch_rule.arn
 
 }
 
-resource "aws_cloudwatch_event_rule" "CloudWatch" {
+resource "aws_cloudwatch_event_rule" "CloudWatch_rule" {
   name        = var.function_name
   description = var.description
   schedule_expression = var.schedule_expression
 }
 resource "aws_cloudwatch_event_target" "lambda_schedular_target" {
-  rule = aws_cloudwatch_event_rule.CloudWatch.name
+  rule = aws_cloudwatch_event_rule.CloudWatch_rule.name
   arn  = aws_lambda_function.this.arn
 }
