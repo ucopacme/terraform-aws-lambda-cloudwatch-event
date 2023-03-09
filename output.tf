@@ -1,4 +1,4 @@
-output "Function_arn" {
+output "function_arn" {
   value = aws_lambda_function.this.*.arn
 }
 output "function_name" {
